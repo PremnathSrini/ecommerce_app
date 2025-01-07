@@ -151,11 +151,13 @@
                         url: href,
                         data: {
                             _token: "{{ csrf_token() }}",
-                            'orderStatus': orderStatus
+                            'orderStatus': orderStatus,
+                            'order_id': orderId
                         },
                         success: function (response) {
                             if(response.success){
                                 toastr.success('Order Status Updated');
+                                console.log(response.order);
                             }
                         },
                         error: function (xhr, status, error) {

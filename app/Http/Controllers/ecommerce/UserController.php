@@ -39,6 +39,7 @@ class UserController extends Controller
         $data['recent_products'] = Products::orderByDesc('id')->take(30)->get();
         $productIds = OrderDescription::distinct()->pluck('product_id');
         $data['best_selling_products'] = $best = Products::whereIn('id', $productIds)->get();
+        $data['notifications'] = $notifications = Auth::user()->unreadNotifications;
         return view('ecommerce.layouts.index',$data);
     }
 
@@ -46,14 +47,24 @@ class UserController extends Controller
         $id = Auth::id();
         $user = User::where('id',$id)->first();
         $addresses = Address::where('user_id',$id)->get();
-        return view('ecommerce.user.userAccount',['user'=>$user,'addresses'=>$addresses]);
+        $notifications = Auth::user()->unreadNotifications;
+        return view('ecommerce.user.userAccount',[
+            'user'=>$user,
+            'addresses'=>$addresses,
+            'notifications' => $notifications,
+        ]);
     }
 
     public function manageAddress(){
         $id = Auth::id();
         $user = User::where('id',$id)->first();
         $addresses = Address::where('user_id',$id)->get();
-        return view('ecommerce.user.user-address',['user'=>$user,'addresses'=>$addresses]);
+        $notifications = Auth::user()->unreadNotifications;
+        return view('ecommerce.user.user-address',[
+            'user'=>$user,
+            'addresses'=>$addresses,
+            'notifications' => $notifications,
+        ]);
     }
 
     public function profileUpdate(Request $request)
@@ -89,8 +100,9 @@ class UserController extends Controller
 
     public function addAddress(){
         $id = Auth::id();
-        $user = User::where('id',$id)->first();
-        return view('ecommerce.user.address-form',['user'=> $user]);
+        $data['user'] = User::where('id',$id)->first();
+        $data['notifications'] = $notifications = Auth::user()->unreadNotifications;
+        return view('ecommerce.user.address-form',$data);
     }
 
     public function storeAddress(Request $request){

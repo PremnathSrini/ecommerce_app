@@ -117,9 +117,17 @@
                             </svg>
                         </a>
                     </li>
+                    <li>
+                        <a href="#" class="p-2 mx-1 text-dark" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasNotifications" aria-controls="offcanvasNotifications">
+                            <i class="bi bi-bell h4 pt-2"></i>
+                            <span class="position-absolute top-0 end-0 mt-2 me-2 badge rounded-pill bg-danger">
+                                {{$count_of_unreadNotification ?? ''}}
+                            </span>
+                        </a>
+                    </li>
                 </ul>
             </div>
-
         </div>
     </div>
 </header>

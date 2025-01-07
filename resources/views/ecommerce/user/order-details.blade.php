@@ -95,19 +95,21 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($orderDescriptions as $orderDescription)
+                                        @foreach ($orderDescription->products as $product)
                                         <tr>
                                             <td class="text-info">
-                                                {{$orderDescription->products->product_name}}
+                                                {{$product->product_name ?? ''}}
                                             </td>
                                             <td> {{$orderDescription->quantity}} </td>
-                                            <td>₹ {{number_format($orderDescription->products->price,2)}} </td>
-                                            <td>₹ {{number_format(($orderDescription->quantity * $orderDescription->products->price),2)}} </td>
+                                            <td>₹ {{$product->price ? number_format($product->price,2) : '0.0' }} </td>
+                                            <td>₹ {{$orderDescription->quantity ? number_format(($orderDescription->quantity * $product->price),2) : '0.0'}} </td>
                                             {{-- <td class="d-flex justify-content-around align-items-center">
-                                                <a href="{{route('reorder',base64_encode($orderDescription->products->id))}}" class="btn bg-info" title="Reorder Add Product to Cart"><i class="bi bi-cart-fill text-white"></i></a>
+                                                <a href="{{route('reorder',base64_encode($orderDescription->product->id))}}" class="btn bg-info" title="Reorder Add Product to Cart"><i class="bi bi-cart-fill text-white"></i></a>
                                                 <a href="" class="btn bg-danger" title="Return Product"><i class="bi bi-arrow-return-left text-white"></i></a>
                                             </td> --}}
                                         </tr>
                                     </tbody>
+                                    @endforeach
                                     @endforeach
                                     <tfoot>
                                         <tr>

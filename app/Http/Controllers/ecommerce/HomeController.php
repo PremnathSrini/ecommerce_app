@@ -26,6 +26,8 @@ class HomeController extends Controller
         $data['recent_products'] = Products::orderByDesc('id')->take(30)->get();
         $productIds = OrderDescription::distinct()->pluck('product_id');
         $data['best_selling_products'] = $best = Products::whereIn('id', $productIds)->get();
+        $data['notifications'] = $notifications = Auth::user()->unreadNotifications;
+        $data['count_of_unreadNotification'] = count($notifications);
         return view('ecommerce.layouts.index',$data);
     }
 
@@ -74,5 +76,11 @@ class HomeController extends Controller
         $productIds = OrderDescription::distinct()->pluck('product_id');
         $data['best_selling_products'] = $best = Products::whereIn('id', $productIds)->get();
         return view('ecommerce.Categories.best-selling',$data);
+    }
+
+    public function markAsReadNotification(){
+        $user = Auth::user();
+        $user->unreadNotifications->markAsRead();
+        return back();
     }
 }

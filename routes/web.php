@@ -92,6 +92,9 @@ Route::middleware([AuthUser::class])->prefix('/user')->group(function(){
     Route::get('reorder/{product_id}',[OrderController::class,'reorderProduct'])->name('reorder');
     Route::post('cancel-order',[OrderController::class,'cancelOrder'])->name('cancel.order');
     /* Orders */
+
+    /* Notification */
+    Route::get('mark-as-read',[HomeController::class,'markAsReadNotification']);
 });
 
 

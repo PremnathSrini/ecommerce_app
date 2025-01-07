@@ -4,9 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Notifications\Notifiable;
 
 class Order extends Model
 {
+    use Notifiable;
     protected $table = 'orders';
 
     protected $guarded = [];

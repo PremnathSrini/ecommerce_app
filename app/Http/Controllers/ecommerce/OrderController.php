@@ -23,7 +23,7 @@ class OrderController extends Controller
         $user_id=Auth::id();
         $data['userEmail'] = User::where('id',$user_id)->value('email');
         $data['orders'] = $orders =  Order::with('orderDescriptions','status')->where('user_id',Auth::id())->get();
-
+        $data['notifications'] = $notifications = Auth::user()->unreadNotifications;
         return view('ecommerce.user.my-orders',$data);
     }
     public function viewOrder($order_id)
@@ -33,6 +33,7 @@ class OrderController extends Controller
 
         $data['orders'] = $orders = Order::with(['status','orderDescriptions','address'])->where('id',$order_id)->get();
         $data['orderDescriptions'] = $orderDescriptions = OrderDescription::with('products')->where('order_id',$order_id)->get();
+        $data['notifications'] = $notifications = Auth::user()->unreadNotifications;
         return view('ecommerce.user.order-details',$data);
     }
 

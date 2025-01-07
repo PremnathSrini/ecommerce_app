@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderCancelReason;
 use App\Models\OrderDescription;
 use App\Models\OrderStatus;
+use App\Notifications\UserNotification;
 use DB;
 use Illuminate\Http\Request;
 use Throwable;
@@ -67,13 +68,19 @@ class AdminOrderController extends Controller
 
     public function changeOrderStatus(Request $request){
         $orderId = $request->input('order_id');
+        // $order = Order::with(['user' => function($query){
+        //     $query->where('id',$request->orderId);
+        // }])->get();
+
         DB::beginTransaction();
         try{
             Order::where('id',$orderId)->update([
                 'order_status_id' => $request->orderStatus,
             ]);
             DB::commit();
-            return ['success'=>true];
+            $order = Order::with(['user','status'])->findOrFail($orderId);
+            $order->user->notify(new UserNotification($order));
+            return ['success'=>true,'order' => $order];
         }catch(Throwable $e){
             DB::rollBack();
             return $e->getMessage();
